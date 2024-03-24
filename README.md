@@ -1,59 +1,60 @@
 # MqHackathon2023
 
-# Workers Compensation Claims Prediction
+# Workers' Compensation Claims Prediction
 
-## Project Overview
+This project aims to predict the "gross incurred cost" of workers' compensation claims using machine learning (ML) and artificial intelligence (AI) models based on psychosocial and demographic data. The models predict both continuous and categorical outcomes related to the costs and claimants' fitness for work over time.
 
-This project aims to predict the "gross incurred cost" of workers' compensation claims based on psychosocial and demographic data. The primary goal is to leverage machine learning and artificial intelligence to inform strategies that manage psychosocial factors influencing insurance claims. This solution utilizes a combination of RandomForestRegressor for continuous variables and a Neural Network model for categorical outcomes.
+## Dataset Overview
 
-## Data Description
+The dataset contains 71 columns of data across 552 cases, including psychosocial screening and claims cost data. The task focuses on predicting several specific variables that represent different aspects of the claim costs and the claimant's fitness for work over various periods post-injury.
 
-The dataset comprises 71 columns of data across 552 cases, including psychosocial screening data and claims cost data. The target variables for prediction include cost-related variables (Net_total_incurred, Total_Paid, Other_Paid, Payment_medical, and Other_paid_risk) and categorical variables indicating the claimant's fitness for work at various time intervals (Fitness_week2, Fitness_week6, Fitness_week12, Fitness_week26, and Fitness_week52).
+## Preprocessing Steps
 
-## Methodology
+1. **Categorical Encoding**: Qualitative variables are encoded into numerical format using one-hot encoding, facilitating their use in ML models.
+   
+2. **Handling Missing Values**: Missing values are filled with appropriate placeholders or dropped, depending on the nature of the data.
 
-### Data Preprocessing
+3. **Date Calculations**: The time between the date of the accident and the claim finalization date is calculated to provide a duration which could be a relevant feature for prediction.
 
-1. **Categorical Encoding:** Non-numeric columns such as 'Gender', 'State', and 'Intervention Required' were encoded using one-hot encoding to transform them into a format that can be provided to ML models for prediction.
+4. **Feature Selection**: Irrelevant features are dropped to simplify the model and potentially improve its performance.
 
-2. **Date Handling:** The difference between 'Claim_Finalised_Date' and 'Date_of_Accident' was calculated to capture the claim duration, an important feature for predicting costs.
+## Model Building
 
-3. **Missing Values Handling:** Missing values in categorical data were filled with 'Unknown' or a suitable placeholder, and numerical missing values were imputed with either 0 or the mean of the column, depending on the context.
+Two types of models were built to predict the outcomes:
 
-4. **Feature Reduction:** Unnecessary features and those with many missing values were dropped to simplify the model without compromising prediction accuracy.
+### Continuous Outcomes
 
-### Machine Learning Models
+For predicting continuous variables like "Net_total_incurred" and "Total_Paid," a **Random Forest Regressor** model was utilized. The model's performance was evaluated using the Mean Squared Error (MSE) metric, defined by the formula:
 
-#### RandomForestRegressor
+\[
+\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}(Y_i - \hat{Y}_i)^2
+\]
 
-- **Mathematical Background:** RandomForest is an ensemble learning method that operates by constructing a multitude of decision trees at training time and outputting the mean/average prediction of the individual trees for regression tasks.
+where:
+- \(n\) is the number of observations,
+- \(Y_i\) is the actual value, and
+- \(\hat{Y}_i\) is the predicted value.
 
-- **Formula:** The prediction \( \hat{y} \) of the RandomForestRegressor for a given input vector \( X \) is calculated by averaging the predictions of \( N \) individual trees:
+### Categorical Outcomes
 
-\[ \hat{y} = \frac{1}{N} \sum_{i=1}^{N} f_i(X) \]
+For predicting categorical outcomes such as the claimant's fitness for work at different time intervals, a **Neural Network** model was constructed using TensorFlow and Keras. The network consists of fully connected layers with ReLU activation functions and a softmax output layer for multi-class classification. The loss function used is the sparse categorical cross-entropy, given by:
 
-where \( f_i(X) \) is the prediction of the \( i^{th} \) tree.
+\[
+\text{Loss} = -\sum_{c=1}^{M}y_{o,c}\log(p_{o,c})
+\]
 
-#### Neural Network for Categorical Outcomes
+where:
+- \(M\) is the number of classes,
+- \(y\) is the binary indicator (0 or 1) of class \(c\) being the correct classification for observation \(o\),
+- \(p\) is the predicted probability of observation \(o\) being of class \(c\).
 
-- **Architecture:** The model consists of an input layer, two hidden layers with ReLU activation, dropout layers for regularization, and a softmax output layer for multiclass classification.
+The accuracy metric is used to evaluate the model's performance, defined as the ratio of correctly predicted instances to the total instances.
 
-- **Loss Function:** The Sparse Categorical Crossentropy loss function is used, which is suitable for multi-class classification problems when labels are integers.
+## Implementation
 
-- **Optimization:** Adam optimizer is used for its efficiency in both computation and memory requirement.
-
-### Model Evaluation
-
-- For continuous variables, Mean Squared Error (MSE) is used:
-
-\[ MSE = \frac{1}{n} \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2 \]
-
-- For categorical outcomes, accuracy is the metric of choice, representing the proportion of correctly predicted instances.
-
-## Results
-
-- The models' performance metrics, such as MSE for continuous outcomes and accuracy for categorical outcomes, provide insights into their effectiveness in predicting various aspects of workers' compensation claims.
+The project is implemented in Jupyter notebook, using libraries such as scikit-learn for machine learning models, pandas for data manipulation, and TensorFlow for building neural network models. The preprocessing, model building, training, and evaluation steps are encapsulated in functions to streamline the prediction process for both continuous and categorical outcomes.
 
 ## Conclusion
 
-This project demonstrates the application of RandomForestRegressor and Neural Networks to predict the costs and recovery outcomes of workers' compensation claims based on psychosocial and demographic data. Through meticulous data preprocessing and strategic model selection, we can gain valuable insights to inform better management strategies for such claims.
+This project demonstrates the application of machine learning and artificial intelligence techniques to predict outcomes related to workers' compensation claims based on psychosocial and demographic data. By accurately predicting these outcomes, strategies can be informed to better manage the psychosocial factors influencing these insurance claims.
+
